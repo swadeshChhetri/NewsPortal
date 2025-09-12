@@ -142,7 +142,7 @@ This project is licensed under the **MIT License**.
 ## 💡 Author
 👤 **Swadesh Chhetri**  
 - GitHub: [@SwadeshChhetri](https://github.com/SwadeshChhetri)  
-- LinkedIn: [Your LinkedIn Profile]  
-- Portfolio: [Your Portfolio Link]  
+- LinkedIn: www.linkedin.com/in/swadeshchhetri 
+- Portfolio: [[Your Portfolio Link]](https://swadeshportfolio.vercel.app/)  
 
 ---
