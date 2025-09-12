@@ -1,12 +1,148 @@
-# React + Vite
+# 📰 NewsPortal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application designed to deliver and manage news articles efficiently.  
+The project includes both a **React frontend** and a **Laravel backend**, providing a seamless experience for both readers and administrators.  
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+### User Side
+- Browse news across categories.
+- Highlighted daily articles with slider.
+- Search news by keywords.
+- Read article details and post comments (requires login).
+- Register & Login with email and password.
+- Subscribe with email to receive important updates.
+- Fully responsive UI with smooth loaders and skeleton screens.
+- Secure logout functionality.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Admin Side
+- Secure login for admins (register allowed for testing).
+- Dashboard with statistics:
+  - Total News
+  - Published News
+  - Draft News
+  - Categories
+- Latest 5 news articles and recent comments.
+- **Manage News**: Add, edit, delete, and filter articles.
+- **Manage Categories**: Add new categories or filter existing ones.
+- **Manage Media** (in progress): Upload and manage videos.
+- Logout option.
+
+---
+
+## 🛠️ Technology Stack
+
+**Frontend:**
+- React  
+- TailwindCSS  
+- Toaster Notifications  
+
+**Backend:**
+- Laravel 12  
+- Sanctum Authentication  
+- MySQL Database  
+
+**Deployment:**
+- AWS EC2 (Backend)  
+- AWS S3 (Frontend hosting)  
+
+**Other Tools:**
+- Postman (API testing)  
+- GitHub (Version Control)  
+
+---
+
+## 📂 Project Structure
+
+```
+NewsPortal/
+│
+├── frontend/        # React + TailwindCSS
+│   ├── public/
+│   ├── src/
+│   └── package.json
+│
+├── backend/         # Laravel + MySQL
+│   ├── app/
+│   ├── database/
+│   ├── routes/
+│   └── composer.json
+│
+└── README.md
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/newsportal.git
+cd newsportal
+```
+
+### 2. Setup Backend (Laravel)
+```bash
+cd backend
+composer install
+cp .env.example .env
+php artisan key:generate
+```
+
+- Configure your `.env` file with **MySQL database credentials**.
+- Run migrations:
+```bash
+php artisan migrate
+php artisan serve
+```
+
+### 3. Setup Frontend (React)
+```bash
+cd frontend
+npm install
+npm start
+```
+
+---
+
+## 📸 Screenshots
+
+### User Side
+- Homepage with News Highlights  
+- Category-wise browsing  
+- Article details with comments  
+
+### Admin Side
+- Dashboard with statistics  
+- Manage News & Categories  
+- Media upload (coming soon)  
+
+---
+
+## 📌 Roadmap
+- [ ] Add bulk upload option for news.  
+- [ ] Complete Media Management module.  
+- [ ] Add dark mode support.  
+- [ ] Deploy CI/CD pipelines with GitHub Actions.  
+
+---
+
+## 🙌 Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you’d like to change.  
+
+---
+
+## 📜 License
+This project is licensed under the **MIT License**.  
+
+---
+
+## 💡 Author
+👤 **Swadesh Chhetri**  
+- GitHub: [@SwadeshChhetri](https://github.com/SwadeshChhetri)  
+- LinkedIn: [Your LinkedIn Profile]  
+- Portfolio: [Your Portfolio Link]  
+
+---
