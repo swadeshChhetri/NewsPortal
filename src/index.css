@@ -1,3 +1,46 @@
-html, body, #root {
+@import "tailwindcss";
+/* @import "@tailwindcss/typography"; */
+
+html,
+body,
+#root {
   height: 100%;
+}
+
+.ProseMirror:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.tiptap-editor h1 {
+  @apply text-3xl font-bold my-4;
+}
+
+.tiptap-editor h2 {
+  @apply text-2xl font-bold my-3;
+}
+
+.tiptap-editor p {
+  @apply my-2;
+}
+
+.tiptap-editor ul {
+  @apply list-disc pl-5 my-2;
+}
+
+.tiptap-editor ol {
+  @apply list-decimal pl-5 my-2;
+}
+
+.tiptap-editor code {
+  @apply bg-gray-200 p-1 rounded text-sm font-mono;
+}
+
+.tiptap-editor blockquote {
+  @apply border-l-4 border-gray-300 pl-4 italic my-3;
+}
+
+/* Fix ProseMirror white-space issue */
+.tiptap-editor {
+  white-space: pre-wrap;
 }

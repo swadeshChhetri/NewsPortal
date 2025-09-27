@@ -4,8 +4,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useRef } from "react";
-import NewsCard from "../news/NewsCard";
-
+import { Link } from "react-router-dom";
 
 const NewsSlider = ({
   newsList,
@@ -14,20 +13,35 @@ const NewsSlider = ({
   autoPlay = false,
   autoplayDelay = 3000,
   loop = true,
-  height,
   navigation = true,
   pagination = false,
 }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
+  const timeAgo = (dateString) => {
+    const now = new Date();
+    const past = new Date(dateString);
+    const diff = Math.floor((now - past) / 1000);
+
+    if (diff < 60) return `${diff} sec ago`;
+    if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
+    if (diff < 86400)
+      return `${Math.floor(diff / 3600)} hour${
+        Math.floor(diff / 3600) > 1 ? "s" : ""
+      } ago`;
+    return `${Math.floor(diff / 86400)} day${
+      Math.floor(diff / 86400) > 1 ? "s" : ""
+    } ago`;
+  };
+
   return (
     <div className="relative">
       {navigation && (
-        <div className="absolute inset-0 flex justify-between items-center px-4 pointer-events-none z-10">
+        <div className="absolute inset-0 flex justify-between items-center px-4 pointer-events-none z-20">
           <button
             ref={prevRef}
-            className="bg-white p-3 rounded-full shadow hover:bg-yellow-400 transition pointer-events-auto"
+            className="bg-white/90 backdrop-blur-sm p-3 rounded-full shadow hover:bg-yellow-400 transition pointer-events-auto"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +61,7 @@ const NewsSlider = ({
 
           <button
             ref={nextRef}
-            className="bg-white p-3 rounded-full shadow hover:bg-yellow-400 transition pointer-events-auto"
+            className="bg-white/90 backdrop-blur-sm p-3 rounded-full shadow hover:bg-yellow-400 transition pointer-events-auto"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -87,20 +101,51 @@ const NewsSlider = ({
             swiper.navigation.update();
           }
         }}
-      
-        className="rounded-lg"
+        className="rounded-xl"
       >
-        {newsList.map((news, idx) => {
-          // Pick correct image URL
+        {newsList.map((item, idx) => (
+          <SwiperSlide key={idx}>
+            <div className="relative rounded-xl overflow-hidden group h-64 sm:h-72 md:h-80 shadow-lg hover:shadow-2xl transition">
+              {/* Image */}
+              <Link to={`/news/${item._id}`} className="block h-full w-full">
+                <img
+                  src={`${import.meta.env.VITE_BASE_URL}${item.image}`}
+                  alt={item.title}
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition duration-500"
+                />
 
-          return (
-            <SwiperSlide key={idx}>
-              <div className="bg-white rounded-lg shadow hover:shadow-lg transition flex flex-col h-full" >
-                <NewsCard key={news.id} item={news}  />
+                {/* Highlight badge */}
+                {item.is_highlight && (
+                  <span className="absolute top-2 left-2 bg-yellow-400 text-white text-xs font-bold px-2 py-1 rounded shadow">
+                    HIGHLIGHT
+                  </span>
+                )}
+
+                {/* Category badge */}
+                {item.category_id?.name && (
+                  <span className="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded shadow">
+                    {item.category_id.name.toUpperCase()}
+                  </span>
+                )}
+              </Link>
+
+              {/* Content overlay */}
+              <div className="absolute bottom-0 left-0 w-full bg-black/25 p-4 text-white z-10">
+                <h3 className="text-lg font-bold line-clamp-2 group-hover:text-yellow-400 transition-colors">
+                  <Link to={`/news/${item._id}`}>{item.title}</Link>
+                </h3>
+
+                <p className="text-sm text-gray-200 line-clamp-2 mt-1">
+                  {item.content || "No description available."}
+                </p>
+
+                <div className="flex items-center justify-between text-xs mt-2 text-gray-300">
+                  <span>Published: {timeAgo(item.createdAt)}</span>
+                </div>
               </div>
-            </SwiperSlide>
-          );
-        })}
+            </div>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );

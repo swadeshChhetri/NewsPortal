@@ -10,15 +10,22 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Load user from localStorage when app starts
+  // Load user from localStorage safely when app starts
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (storedUser && storedUser !== "undefined") {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (err) {
+        console.warn("Failed to parse stored user:", err);
+        setUser(null);
+      }
+    } else {
+      setUser(null);
     }
   }, []);
 
-  // Function to log in (you’ll connect with API)
+  // Function to log in
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
