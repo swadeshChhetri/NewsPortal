@@ -80,7 +80,6 @@ export default function NewsManagement() {
 
       // Append all safe values
       Object.entries(payload).forEach(([key, value]) => {
-
         if (value === null || value === undefined || value === "") return;
 
         // only append image if it's a File

@@ -8,15 +8,6 @@ const API = axios.create({
   baseURL: API_URL,
 });
 
-// Attach token automatically if stored
-// API.interceptors.request.use((config) => {
-//   const token = localStorage.getItem("token");
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
-
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -43,9 +34,6 @@ export const NewsAPI = {
   },
 
   create: async (data) => {
-    // for (let [key, value] of data.entries()) {
-    //   console.log(`${key}:`, value);
-    // }
     const response = await API.post("/admin/news", data, {
       headers: { "Content-Type": "multipart/form-data" },
     });
@@ -99,6 +87,13 @@ export const UserAuthAPI = {
         passwordConfirmation: formData.passwordConfirmation,
       })
     ).data,
+};
+
+export const UserAPI = {
+  fetchAll: async () => (await API.get("/admin/users")).data,
+  fetchById: async (id) => (await API.get(`/admin/users/${id}`)).data,
+  update: async (id, data) => (await API.put(`/admin/users/${id}`, data)).data,
+  delete: async (id) => (await API.delete(`/admin/users/${id}`)).data, // new
 };
 
 // ---------------- Comments APIs ----------------

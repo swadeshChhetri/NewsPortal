@@ -1,29 +1,80 @@
-import React from "react";
-import { ChevronDown } from "lucide-react";
+import React, { useState } from "react";
 import AdminLayout from "../../../components/layout/AdminLayout";
-import { Button, Select } from "../../../components/common/index";
-import { Link } from "react-router-dom";
+import { Select } from "../../../components/common/index";
 import SearchBar from "../../../components/common/SearchBar";
 import ButtonLink from "../../../components/common/ButtonLink";
 import { Table } from "../components/Table";
+import { useUserManagement } from "../hooks/useUserManagement";
+import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function ManageUser() {
+  const { users,   deleteUser, loading, error } = useUserManagement();
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
+
+  let filteredUsers = users.filter(
+    (u) =>
+      u.name.toLowerCase().includes(search.toLowerCase()) ||
+      u.email.toLowerCase().includes(search.toLowerCase())
+  );
+
+  if (sortBy === "az") {
+    filteredUsers = [...filteredUsers].sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+  } else if (sortBy === "za") {
+    filteredUsers = [...filteredUsers].sort((a, b) =>
+      b.name.localeCompare(a.name)
+    );
+  } else if (sortBy === "oldest") {
+    filteredUsers = [...filteredUsers].sort(
+      (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+    );
+  } else if (sortBy === "newest") {
+    filteredUsers = [...filteredUsers].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+  }
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteUser(id);
+      toast.success("User deleted successfully!");
+    } catch (err) {
+      alert("Failed to delete user.");
+      console.error(err);
+    }
+  };
+
   return (
     <AdminLayout className="p-6">
-      {/* 1. Title & Breadcrumb */}
       <div className="flex justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Users Management</h1>
         <p className="text-sm text-gray-500">Dashboard / Users</p>
       </div>
 
-      {/* 2. Actions: Create + Search + Filter */}
       <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
         <ButtonLink to="/admin/user-management/create">+ Add User</ButtonLink>
 
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-          <SearchBar />
+          <SearchBar
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+          />
 
           <Select
+            value={sortBy}
+            onChange={(e) => {
+              setSortBy(e.target.value);
+            }}
             options={[
               { label: "Sort: Oldest", value: "oldest" },
               { label: "Sort: Newest", value: "newest" },
@@ -35,38 +86,33 @@ export default function ManageUser() {
         </div>
       </div>
 
-      {/* 3. User Count Filters */}
-      <div className="flex items-center gap-6 mb-6 text-sm">
-        <span className="text-gray-800 cursor-pointer hover:text-yellow-600">
-          All (1)
-        </span>
-        <span className="text-red-600 cursor-pointer hover:underline">
-          Administrator (1)
-        </span>
-        <span className="text-gray-600 cursor-pointer hover:underline">
-          Moderator (0)
-        </span>
-        <span className="text-gray-600 cursor-pointer hover:underline">
-          User (0)
-        </span>
-      </div>
+      {loading && <p>Loading users...</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
-      {/* 4. User Management Table */}
       <Table
-        columns={["User", "E-mail", "Role"]}
-        data={[
-          ["John Doe", "john@example.com", "Admin"],
-          ["Jane Smith", "jane@example.com", "User"],
-        ]}
-        actions={(row) => (
-          <>
-            <button className="px-3 py-1 text-sm border border-gray-300 rounded-lg mr-2 hover:bg-gray-100">
-              Edit
-            </button>
-            <button className="px-3 py-1 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600">
-              Delete
-            </button>
-          </>
+        columns={["SL No", "User", "E-mail", "Status"]}
+        data={filteredUsers} // array of user objects
+        renderRow={(user, index) => (
+          <tr key={user._id} className="border-t">
+            <td className="p-3">{index + 1}</td>
+            <td className="p-3">{user.name}</td>
+            <td className="p-3">{user.email}</td>
+            <td className="p-3">{user.status || "Active"}</td>
+            <td className="p-3 text-right">
+              <Link
+                to={`/admin/user-management/edit/${user._id}`}
+                className="px-3 py-1 text-sm border border-gray-300 rounded-lg mr-2 hover:bg-gray-100"
+              >
+                Edit
+              </Link>
+              <button
+                onClick={() => handleDelete(user._id)}
+                className="px-3 py-1 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
         )}
       />
     </AdminLayout>

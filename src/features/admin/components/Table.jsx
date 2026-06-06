@@ -1,4 +1,4 @@
-export const Table = ({ columns, data, actions }) => (
+export const Table = ({ columns, data, renderRow }) => (
   <div className="overflow-x-auto bg-white rounded-lg shadow">
     <table className="w-full text-left border-collapse">
       <thead className="bg-gray-100 text-gray-700">
@@ -8,20 +8,23 @@ export const Table = ({ columns, data, actions }) => (
               {col}
             </th>
           ))}
-          {actions && <th className="p-3 text-right">Actions</th>}
+          {renderRow && <th className="p-3 text-right">Actions</th>}
         </tr>
       </thead>
       <tbody>
-        {data.map((row, i) => (
-          <tr key={i} className="border-t">
-            {row.map((cell, j) => (
-              <td key={j} className="p-3">
-                {cell}
-              </td>
-            ))}
-            {actions && <td className="p-3 text-right">{actions(row)}</td>}
-          </tr>
-        ))}
+        {data.map((item, i) =>
+          renderRow ? (
+            renderRow(item, i)
+          ) : (
+            <tr key={i} className="border-t">
+              {item.map((cell, j) => (
+                <td key={j} className="p-3">
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          )
+        )}
       </tbody>
     </table>
   </div>

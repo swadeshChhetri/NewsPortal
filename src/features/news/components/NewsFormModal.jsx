@@ -71,11 +71,6 @@ export default function NewsFormModal({
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(form, editingNews?._id);
-    
-    // const formData = new FormData(e.target);
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(`${key}:`, value);
-    // }
   };
 
   if (!isOpen) return null;

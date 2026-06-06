@@ -24,7 +24,7 @@ import AddNewPost from "./../../features/admin/components/AddNewPost";
 // Protected
 import ProtectedAdminRoute from "./ProtectedAdminRoute";
 import ManageUser from "../../features/admin/pages/ManageUser";
-import AddUser from "../../features/admin/components/AddUser";
+import UserForm from "../../features/admin/components/UserForm";
 
 
 
@@ -44,7 +44,8 @@ export default function AppRoutes() {
       <Route path="/admin/register" element={<AdminRegisterPage />} />
       <Route path="/admin/addpost" element={<AddNewPost />} />
       <Route path="/admin/user-management" element={<ManageUser />} />
-      <Route path="/admin/user-management/create" element={<AddUser />} />
+      <Route path="/admin/user-management/create" element={<UserForm />} />
+      <Route path="/admin/user-management/edit/:id" element={<UserForm />} />
 
       {/* Protected Admin */}
       <Route

@@ -8,16 +8,17 @@ import AdminLayout from "../../../components/layout/AdminLayout";
 const Dashboard = () => {
   const { newsData, stats, recentComments, loading } = useDashboardData();
 
+  console.log(recentComments);
   if (loading) {
     return <SpinnerLoader size={60} color="yellow-500" />;
   }
 
   return (
     <AdminLayout>
-          <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-          <StatsCards stats={stats} />
-          <RecentNewsTable newsData={newsData} />
-          <RecentComments comments={recentComments} />
+      <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
+      <StatsCards stats={stats} />
+      <RecentNewsTable newsData={newsData} />
+      <RecentComments comments={recentComments} />
     </AdminLayout>
   );
 };
